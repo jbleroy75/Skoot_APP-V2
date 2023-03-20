@@ -68,6 +68,27 @@ const ScreenPlayerStatistic = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Player Statistic</Text>
+      <TouchableOpacity
+        onPress={() => setModalVisible(true)}
+        style={styles.filterButton}>
+        <Text style={styles.filterButtonText}>Filter</Text>
+      </TouchableOpacity>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}>
+        <View style={styles.modalView}>
+          <Text style={styles.modalTitle}>Filters</Text>
+          <TouchableOpacity
+            onPress={() => setModalVisible(false)}
+            style={styles.closeButton}>
+            <Text style={styles.closeButtonText}>Close</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
       <View style={styles.searchContainer}>
         <TextInput
           style={styles.searchInput}
