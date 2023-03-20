@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>39142473072-iser2bg18cn5rn999cuhjd75udjpshu1.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.39142473072-iser2bg18cn5rn999cuhjd75udjpshu1</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBFlik3Uskn-P62UW2Erked_PxpBeozJ6s</string>
+	<key>GCM_SENDER_ID</key>
+	<string>39142473072</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>skoot</string>
+	<key>PROJECT_ID</key>
+	<string>skoot-c95db</string>
+	<key>STORAGE_BUCKET</key>
+	<string>skoot-c95db.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:39142473072:ios:c9bd3e61c29dd2927163b5</string>
+	<key>DATABASE_URL</key> 
+	<string>https://<app-instance-default-rtdb>skoot-c95db-default-rtdb.europe-west1.firebasedatabase.app</string>
+</dict>

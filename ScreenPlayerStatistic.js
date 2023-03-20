@@ -1,3 +1,4 @@
+import { useFonts } from "expo-font";
 import * as React from "react";
 import {
   View,
@@ -112,7 +113,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   title: {
-    fontFamily: "Poppins",
+    fontFamily: "Poppins_semibold",
     fontStyle: "normal",
     fontWeight: "800",
     fontSize: 25,
@@ -244,6 +245,43 @@ const styles = StyleSheet.create({
   },
   playersList: {
     width: "100%",
+  },
+
+  filterButton: {
+    backgroundColor: "#FF5E5E",
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 5,
+    marginBottom: 20,
+  },
+  filterButtonText: {
+    color: "#FFFFFF",
+    fontWeight: "bold",
+  },
+  modalView: {
+    flex: 1,
+    backgroundColor: "white",
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    paddingTop: 20,
+    paddingHorizontal: 20,
+  },
+  modalTitle: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 20,
+  },
+  closeButton: {
+    backgroundColor: "#FF5E5E",
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 5,
+    marginTop: 20,
+    alignSelf: "center",
+  },
+  closeButtonText: {
+    color: "#FFFFFF",
+    fontWeight: "bold",
   },
 });
 
