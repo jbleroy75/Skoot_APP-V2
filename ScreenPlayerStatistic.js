@@ -52,6 +52,62 @@ const playersData = [
     logoUri: "/Users/jean-baptisteleroy/SkootProject/assets/549.png",
     imageUri: "/Users/jean-baptisteleroy/SkootProject/assets/joueur.png",
   },
+  {
+    id: 6,
+    name: "Alexandre Garcia1",
+    position: "Forward",
+    age: 23,
+    logoUri: "/Users/jean-baptisteleroy/SkootProject/assets/549.png",
+    imageUri: "/Users/jean-baptisteleroy/SkootProject/assets/joueur.png",
+  },
+  {
+    id: 7,
+    name: "Alexandre Garcia1",
+    position: "Forward",
+    age: 23,
+    logoUri: "/Users/jean-baptisteleroy/SkootProject/assets/549.png",
+    imageUri: "/Users/jean-baptisteleroy/SkootProject/assets/joueur.png",
+  },
+  {
+    id: 8,
+    name: "Alexandre Garcia1",
+    position: "Forward",
+    age: 23,
+    logoUri: "/Users/jean-baptisteleroy/SkootProject/assets/549.png",
+    imageUri: "/Users/jean-baptisteleroy/SkootProject/assets/joueur.png",
+  },
+  {
+    id: 9,
+    name: "Alexandre Garcia1",
+    position: "Forward",
+    age: 23,
+    logoUri: "/Users/jean-baptisteleroy/SkootProject/assets/549.png",
+    imageUri: "/Users/jean-baptisteleroy/SkootProject/assets/joueur.png",
+  },
+  {
+    id: 10,
+    name: "Alexandre Garcia1",
+    position: "Forward",
+    age: 23,
+    logoUri: "/Users/jean-baptisteleroy/SkootProject/assets/549.png",
+    imageUri: "/Users/jean-baptisteleroy/SkootProject/assets/joueur.png",
+  },
+  {
+    id: 11,
+    name: "Alexandre Garcia1",
+    position: "Forward",
+    age: 23,
+    logoUri: "/Users/jean-baptisteleroy/SkootProject/assets/549.png",
+    imageUri: "/Users/jean-baptisteleroy/SkootProject/assets/joueur.png",
+  },
+  {
+    id: 12,
+    name: "Alexandre Garcia1",
+    position: "Forward",
+    age: 23,
+    logoUri: "/Users/jean-baptisteleroy/SkootProject/assets/549.png",
+    imageUri: "/Users/jean-baptisteleroy/SkootProject/assets/joueur.png",
+  },
 ];
 
 const handlePlayerPress = (player, navigation) => {
@@ -61,8 +117,26 @@ const handlePlayerPress = (player, navigation) => {
 const ScreenPlayerStatistic = ({ navigation }) => {
   const [modalVisible, setModalVisible] = React.useState(false);
   const [searchTerm, setSearchTerm] = React.useState("");
+  const [currentPage, setCurrentPage] = React.useState(0);
+
   const filteredPlayers = playersData.filter((player) =>
     player.name.includes(searchTerm)
+  );
+
+  const handleNextPage = () => {
+    setCurrentPage(currentPage + 1);
+  };
+
+  const handlePrevPage = () => {
+    setCurrentPage(currentPage - 1);
+  };
+
+  const playersPerPage = 10;
+  const indexOfLastPlayer = (currentPage + 1) * playersPerPage;
+  const indexOfFirstPlayer = indexOfLastPlayer - playersPerPage;
+  const displayedPlayers = filteredPlayers.slice(
+    indexOfFirstPlayer,
+    indexOfLastPlayer
   );
 
   return (
@@ -73,6 +147,7 @@ const ScreenPlayerStatistic = ({ navigation }) => {
         style={styles.filterButton}>
         <Text style={styles.filterButtonText}>Filter</Text>
       </TouchableOpacity>
+
       <Modal
         animationType="slide"
         transparent={true}
@@ -89,6 +164,7 @@ const ScreenPlayerStatistic = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       </Modal>
+
       <View style={styles.searchContainer}>
         <TextInput
           style={styles.searchInput}
@@ -100,7 +176,7 @@ const ScreenPlayerStatistic = ({ navigation }) => {
       <ScrollView
         style={styles.playersList}
         contentContainerStyle={{ alignItems: "center" }}>
-        {filteredPlayers.map((player) => (
+        {displayedPlayers.map((player) => (
           <TouchableOpacity
             key={player.id}
             onPress={() => handlePlayerPress(player, navigation)}>
@@ -123,6 +199,38 @@ const ScreenPlayerStatistic = ({ navigation }) => {
           </TouchableOpacity>
         ))}
       </ScrollView>
+      <View style={styles.pagination}>
+        <TouchableOpacity
+          style={[
+            styles.paginationButton,
+            currentPage === 0 && styles.disabled,
+          ]}
+          onPress={handlePrevPage}
+          disabled={currentPage === 0}>
+          <Image
+            source={require("./assets/chevron-left.png")}
+            style={styles.chevronImage}
+          />
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[
+            styles.paginationButton,
+            currentPage ===
+              Math.ceil(filteredPlayers.length / playersPerPage) - 1 &&
+              styles.disabled,
+          ]}
+          onPress={handleNextPage}
+          disabled={
+            currentPage ===
+            Math.ceil(filteredPlayers.length / playersPerPage) - 1
+          }>
+          <Image
+            source={require("./assets/chevron-right.png")}
+            style={styles.paginationButtonImage}
+          />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -134,15 +242,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   title: {
-    fontFamily: "Poppins_semibold",
     fontStyle: "normal",
     fontWeight: "800",
     fontSize: 25,
     lineHeight: 30,
     color: "#fff",
     textAlign: "center",
-    marginTop: 50,
-    marginBottom: 20,
+    marginBottom: 25,
   },
   playerContainer: {
     width: "90%",
@@ -303,6 +409,25 @@ const styles = StyleSheet.create({
   closeButtonText: {
     color: "#FFFFFF",
     fontWeight: "bold",
+  },
+  pagination: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginBottom: 20,
+    marginTop: 20,
+    marginLeft: 100,
+  },
+  paginationButton: {
+    backgroundColor: "#414158",
+    borderRadius: 100,
+    marginRight: 100,
+  },
+  paginationButtonText: {
+    color: "#FFFFFF",
+    fontWeight: "bold",
+  },
+  disabled: {
+    backgroundColor: "#797979",
   },
 });
 

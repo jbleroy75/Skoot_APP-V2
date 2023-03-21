@@ -5,6 +5,7 @@ import { TouchableOpacity, StyleSheet, Image } from "react-native";
 import ScreenPlayerStatistic from "./ScreenPlayerStatistic";
 import ListScreen from "./ListScreen";
 import TeamFavoris from "./TeamFavoris";
+import LoginPage from "./LoginPage";
 
 const BookmarkIcon = require("./assets/Bookmark.png");
 const DocumentIcon = require("./assets/Document.png");
@@ -26,7 +27,7 @@ const BottomTabNavigator = () => {
             iconName = DocumentIcon;
           } else if (route.name === "Like") {
             iconName = BookmarkIcon;
-          } else if (route.name === "Like2") {
+          } else if (route.name === "LoginPage") {
             iconName = ProfileIcon;
           }
 
@@ -45,16 +46,17 @@ const BottomTabNavigator = () => {
             </TouchableOpacity>
           );
         },
-      })}
-      tabBarOptions={{
-        style: {
-          backgroundColor: "#222232",
-        },
-      }}>
+        tabBarStyle: [
+          {
+            display: "flex",
+          },
+          null,
+        ],
+      })}>
       <Tab.Screen name="Home" component={ScreenPlayerStatistic} />
       <Tab.Screen name="List" component={ListScreen} />
       <Tab.Screen name="Like" component={TeamFavoris} />
-      <Tab.Screen name="Like2" component={TeamFavoris} />
+      <Tab.Screen name="LoginPage" component={LoginPage} />
     </Tab.Navigator>
   );
 };
@@ -64,16 +66,17 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     flex: 1,
+    marginTop: 15,
   },
   activeTabButton: {
-    backgroundColor: "#fff",
+    backgroundColor: "red",
   },
   inactiveTabButton: {
-    backgroundColor: "#222232",
+    backgroundColor: "white",
   },
   tabIconImage: {
-    width: 20,
-    height: 20,
+    width: 30,
+    height: 30,
   },
 });
 
