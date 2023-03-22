@@ -12,105 +12,6 @@ import {
 } from "react-native";
 import axios from "axios";
 
-// const playersData = [
-//   {
-//     id: 1,
-//     name: "Paul Garcia",
-//     position: "Forward",
-//     age: 23,
-//     logoUri: "/Users/jean-baptisteleroy/SkootProject/assets/549.png",
-//     imageUri: "/Users/jean-baptisteleroy/SkootProject/assets/joueur.png",
-//   },
-//   {
-//     id: 2,
-//     name: "Alexandre Garcia1",
-//     position: "Forward",
-//     age: 23,
-//     logoUri: "/Users/jean-baptisteleroy/SkootProject/assets/549.png",
-//     imageUri: "/Users/jean-baptisteleroy/SkootProject/assets/joueur.png",
-//   },
-//   {
-//     id: 3,
-//     name: "Alexandre Garcia1",
-//     position: "Forward",
-//     age: 23,
-//     logoUri: "/Users/jean-baptisteleroy/SkootProject/assets/549.png",
-//     imageUri: "/Users/jean-baptisteleroy/SkootProject/assets/joueur.png",
-//   },
-//   {
-//     id: 4,
-//     name: "Alexandre Garcia1",
-//     position: "Forward",
-//     age: 23,
-//     logoUri: "/Users/jean-baptisteleroy/SkootProject/assets/549.png",
-//     imageUri: "/Users/jean-baptisteleroy/SkootProject/assets/joueur.png",
-//   },
-//   {
-//     id: 5,
-//     name: "Alexandre Garcia1",
-//     position: "Forward",
-//     age: 23,
-//     logoUri: "/Users/jean-baptisteleroy/SkootProject/assets/549.png",
-//     imageUri: "/Users/jean-baptisteleroy/SkootProject/assets/joueur.png",
-//   },
-//   {
-//     id: 6,
-//     name: "Alexandre Garcia1",
-//     position: "Forward",
-//     age: 23,
-//     logoUri: "/Users/jean-baptisteleroy/SkootProject/assets/549.png",
-//     imageUri: "/Users/jean-baptisteleroy/SkootProject/assets/joueur.png",
-//   },
-//   {
-//     id: 7,
-//     name: "Alexandre Garcia1",
-//     position: "Forward",
-//     age: 23,
-//     logoUri: "/Users/jean-baptisteleroy/SkootProject/assets/549.png",
-//     imageUri: "/Users/jean-baptisteleroy/SkootProject/assets/joueur.png",
-//   },
-//   {
-//     id: 8,
-//     name: "Alexandre Garcia1",
-//     position: "Forward",
-//     age: 23,
-//     logoUri: "/Users/jean-baptisteleroy/SkootProject/assets/549.png",
-//     imageUri: "/Users/jean-baptisteleroy/SkootProject/assets/joueur.png",
-//   },
-//   {
-//     id: 9,
-//     name: "Alexandre Garcia1",
-//     position: "Forward",
-//     age: 23,
-//     logoUri: "/Users/jean-baptisteleroy/SkootProject/assets/549.png",
-//     imageUri: "/Users/jean-baptisteleroy/SkootProject/assets/joueur.png",
-//   },
-//   {
-//     id: 10,
-//     name: "Alexandre Garcia1",
-//     position: "Forward",
-//     age: 23,
-//     logoUri: "/Users/jean-baptisteleroy/SkootProject/assets/549.png",
-//     imageUri: "/Users/jean-baptisteleroy/SkootProject/assets/joueur.png",
-//   },
-//   {
-//     id: 11,
-//     name: "Alexandre Garcia1",
-//     position: "Forward",
-//     age: 23,
-//     logoUri: "/Users/jean-baptisteleroy/SkootProject/assets/549.png",
-//     imageUri: "/Users/jean-baptisteleroy/SkootProject/assets/joueur.png",
-//   },
-//   {
-//     id: 12,
-//     name: "Alexandre Garcia1",
-//     position: "Forward",
-//     age: 23,
-//     logoUri: "/Users/jean-baptisteleroy/SkootProject/assets/549.png",
-//     imageUri: "/Users/jean-baptisteleroy/SkootProject/assets/joueur.png",
-//   },
-// ];
-
 const handlePlayerPress = (player, navigation) => {
   navigation.navigate("PlayerData", { player });
 };
@@ -158,13 +59,12 @@ const ScreenPlayerStatistic = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Player Statistic</Text>
+      <Text style={styles.title}>Players</Text>
       <TouchableOpacity
         onPress={() => setModalVisible(true)}
         style={styles.filterButton}>
         <Text style={styles.filterButtonText}>Filter</Text>
       </TouchableOpacity>
-
       <Modal
         animationType="slide"
         transparent={true}
@@ -181,7 +81,6 @@ const ScreenPlayerStatistic = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       </Modal>
-
       <View style={styles.searchContainer}>
         <TextInput
           style={styles.searchInput}
@@ -190,21 +89,22 @@ const ScreenPlayerStatistic = ({ navigation }) => {
           placeholder="Search by name"
         />
       </View>
-      {/* <ScrollView
+      <ScrollView
         style={styles.playersList}
-        contentContainerStyle={{ alignItems: "center" }}> */}
-      {/* {displayedPlayers.map((player) => (
+        contentContainerStyle={{ alignItems: "center" }}>
+        {info.map((player) => (
           <TouchableOpacity
             key={player.id}
+            //style={styles.playerContainer}
             onPress={() => handlePlayerPress(player, navigation)}>
             <View key={player.id} style={styles.playerContainer}>
               <View style={styles.logoContainer}>
                 <Image source={{ uri: player.logoUri }} style={styles.logo} />
               </View>
               <View style={styles.playerInfo}>
-                <Text style={styles.playerName}>{player.name}</Text>
-                <Text style={styles.playerPosition}>{player.position}</Text>
-                <Text style={styles.playerAge}>{player.age}</Text>
+                <Text style={styles.playerName}>{player.player}</Text>
+                <Text style={styles.playerPosition}>{player.Pos}</Text>
+                <Text style={styles.playerAge}>{player.Age}</Text>
               </View>
               <View style={styles.playerImageContainer}>
                 <Image
@@ -214,67 +114,12 @@ const ScreenPlayerStatistic = ({ navigation }) => {
               </View>
             </View>
           </TouchableOpacity>
-        ))} */}
-      {/* </ScrollView> */}
-
-      {/* <ScrollView> */}
-      {info.map((player) => (
-        //   key={player.id}
-        //   //style={styles.playerContainer}
-        //   onPress={() => handlePlayerPress(player, navigation)}>
-        //   <Image source={{ uri: player.imageUri }} style={styles.playerImage} />
-
-        //   <View style={styles.playerInfo}>
-        //     <Text style={styles.playerName}>{player.name}</Text>
-        //     <Text style={styles.playerPosition}>{player.position}</Text>
-        //     <Text style={styles.playerAge}>{player.age}</Text>
-        //   </View>
-        <TouchableOpacity
-          key={player.id}
-          onPress={() => handlePlayerPress(player, navigation)}>
-          <View>
-            <Text>{player.player}</Text>
-          </View>
-        </TouchableOpacity>
-      ))}
-
-      {/* </ScrollView> */}
-      <View style={styles.pagination}>
-        <TouchableOpacity
-          style={[
-            styles.paginationButton,
-            currentPage === 0 && styles.disabled,
-          ]}
-          onPress={handlePrevPage}
-          disabled={currentPage === 0}>
-          <Image
-            source={require("./assets/chevron-left.png")}
-            style={styles.chevronImage}
-          />
-        </TouchableOpacity>
-
-        {/* <TouchableOpacity
-          style={[
-            styles.paginationButton,
-            currentPage ===
-              Math.ceil(filteredPlayers.length / playersPerPage) - 1 &&
-              styles.disabled,
-          ]}
-          onPress={handleNextPage}
-          disabled={
-            currentPage ===
-            Math.ceil(filteredPlayers.length / playersPerPage) - 1
-          }>
-          <Image
-            source={require("./assets/chevron-right.png")}
-            style={styles.paginationButtonImage}
-          />
-        </TouchableOpacity> */}
-      </View>
+        ))}
+      </ScrollView>
+      {/* PAGINATION */}
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -319,24 +164,22 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   playerName: {
-    fontFamily: "Poppins",
-    fontStyle: "italic",
     fontWeight: "800",
     fontSize: 15,
     lineHeight: 25,
     color: "#ffff",
     letterSpacing: 0.26,
+    marginBottom: 5,
   },
   playerPosition: {
-    fontFamily: "Poppins",
     fontWeight: "500",
     fontSize: 13,
     lineHeight: 14,
     fontWeight: "bold",
     color: "#797979",
+    marginBottom: 5,
   },
   playerAge: {
-    fontFamily: "Poppins",
     fontWeight: "800",
     fontStyle: "normal",
     fontSize: 17,
@@ -476,3 +319,38 @@ const styles = StyleSheet.create({
 });
 
 export default ScreenPlayerStatistic;
+
+// {/* </ScrollView> */}
+// <View style={styles.pagination}>
+//   <TouchableOpacity
+//     style={[
+//       styles.paginationButton,
+//       currentPage === 0 && styles.disabled,
+//     ]}
+//     onPress={handlePrevPage}
+//     disabled={currentPage === 0}>
+//     <Image
+//       source={require("./assets/chevron-left.png")}
+//       style={styles.chevronImage}
+//     />
+//   </TouchableOpacity>
+
+// </View>
+// CODE pagination
+// <TouchableOpacity
+//           style={[
+//             styles.paginationButton,
+//             currentPage ===
+//               Math.ceil(filteredPlayers.length / playersPerPage) - 1 &&
+//               styles.disabled,
+//           ]}
+//           onPress={handleNextPage}
+//           disabled={
+//             currentPage ===
+//             Math.ceil(filteredPlayers.length / playersPerPage) - 1
+//           }>
+//           <Image
+//             source={require("./assets/chevron-right.png")}
+//             style={styles.paginationButtonImage}
+//           />
+//         </TouchableOpacity>

@@ -40,7 +40,7 @@ const SignIn = () => {
         <TouchableOpacity onPress={() => setRememberMe(!rememberMe)}>
           <View style={styles.checkbox}>
             {rememberMe ? (
-              <Text style={styles.checkboxText}>✔️</Text>
+              <Text style={styles.checkboxText}>✅</Text>
             ) : (
               <Text style={styles.checkboxText}>❌</Text>
             )}

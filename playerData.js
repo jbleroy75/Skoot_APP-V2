@@ -176,9 +176,10 @@ const styles = StyleSheet.create({
     fontStyle: "normal",
     fontWeight: "800",
     fontSize: 25,
-    lineHeight: 30,
+    lineHeight: 0,
     color: "#fff",
     textAlign: "center",
+    marginBottom: 0,
   },
 
   scoreContainer: {
