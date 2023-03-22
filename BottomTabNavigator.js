@@ -1,7 +1,6 @@
-import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { TouchableOpacity, StyleSheet, Image } from "react-native";
-
+import React, { useState, useEffect } from "react";
 import ScreenPlayerStatistic from "./ScreenPlayerStatistic";
 import ListScreen from "./ListScreen";
 import TeamFavoris from "./TeamFavoris";
@@ -62,6 +61,9 @@ const BottomTabNavigator = () => {
 };
 
 const styles = StyleSheet.create({
+  TabScreen: {
+    backgroundColor: "red",
+  },
   tabButton: {
     alignItems: "center",
     justifyContent: "center",

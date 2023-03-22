@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Image,
@@ -9,11 +9,12 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import chevronImage from "./assets/chevron-left.png";
+import axios from "axios";
 
 const PlayerData = ({ route, navigation }) => {
   const { player, toggleSave } = route.params;
   const [isSaved, setIsSaved] = useState(player.isSaved);
-
+  const [info, setInfo] = useState("");
   const savePlayer = () => {
     player.isSaved = !player.isSaved;
     setIsSaved(player.isSaved);
@@ -23,9 +24,26 @@ const PlayerData = ({ route, navigation }) => {
       console.warn("toggleSave is not a function");
     }
   };
+  const playerInfo = async () => {
+    try {
+      const res = await axios.get(
+        `https://7c87-91-68-214-149.eu.ngrok.io/data/${player.player}`
+      );
+
+      setInfo(res.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    playerInfo();
+  }, []);
 
   return (
     <View style={styles.container}>
+      <View style={styles.backgroundOverlay} />
+
       <View style={styles.header}>
         <TouchableOpacity
           onPress={() => navigation.goBack()}
@@ -49,7 +67,7 @@ const PlayerData = ({ route, navigation }) => {
             source={require("./assets/joueur.png")}
             style={styles.imageProfile}
           />
-          <Text style={styles.namePlayer}>Frankie de Jong</Text>
+          <Text style={styles.namePlayer}>{info?.[0]?.player}</Text>
           <View style={styles.scoreContainer}>
             <Image
               source={{
@@ -65,38 +83,31 @@ const PlayerData = ({ route, navigation }) => {
         <View style={styles.containerInfo}>
           <View style={styles.elements}>
             <Text style={styles.label}>Position : </Text>
-            <Text style={styles.value}>Mc</Text>
+            <Text style={styles.value}>{info?.[0]?.Pos}</Text>
           </View>
           <View style={styles.elements}>
             <Text style={styles.label}>Nationality : </Text>
-            <Text style={styles.value}>Pays-bas</Text>
+            <Text style={styles.value}>{info?.[0]?.Nation}</Text>
           </View>
-
           <View style={styles.elements}>
             <Text style={styles.label}>Age : </Text>
-            <Text style={styles.value}>5</Text>
+            <Text style={styles.value}>{info?.[0]?.Age}</Text>
           </View>
           <View style={styles.elements}>
             <Text style={styles.label}>Team : </Text>
-            <Text style={styles.value}>{player.name}</Text>
+            <Text style={styles.value}>{info?.[0]?.team}</Text>
           </View>
-
           <View style={styles.elements}>
             <Text style={styles.label}>League : </Text>
-            <Text style={styles.value}>ITA-Serie-A</Text>
+            <Text style={styles.value}>{info?.[0]?.league}</Text>
           </View>
           <View style={styles.elements}>
             <Text style={styles.label}>Season : </Text>
-            <Text style={styles.value}>{2021}</Text>
+            <Text style={styles.value}>{info?.[0]?.season}</Text>
           </View>
-
           <View style={styles.elements}>
             <Text style={styles.label}>Team : </Text>
-            <Text style={styles.value}>Atlanta</Text>
-          </View>
-          <View style={styles.elements}>
-            <Text style={styles.label}>Nation : </Text>
-            <Text style={styles.value}>Rus</Text>
+            <Text style={styles.value}>{info?.[0]?.team}</Text>
           </View>
         </View>
       </ScrollView>
@@ -113,8 +124,16 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#181928",
     alignItems: "center",
-    justifyContent: "flex-start", // Aligner les éléments en haut de la page
-    backgroundImage: require("./assets/background.png"),
+    justifyContent: "flex-start",
+  },
+  backgroundOverlay: {
+    backgroundColor: "rgba(24, 25, 40, 0.8)", // Couleur de fond avec opacité
+  },
+  backgroundImage: {
+    flex: 1,
+    resizeMode: "cover",
+    width: "100%",
+    height: "100%",
   },
 
   imageNameScoreContainer: {
@@ -188,7 +207,6 @@ const styles = StyleSheet.create({
   },
 
   playerInfoContainer: {
-    backgroundColor: "#181928",
     padding: 20,
     borderRadius: 10,
     width: "100%",
@@ -236,6 +254,10 @@ const styles = StyleSheet.create({
     fontSize: 30,
     lineHeight: 30,
     color: "#FFFFFF",
+  },
+  info: {
+    color: "white",
+    fontSize: 30,
   },
 });
 

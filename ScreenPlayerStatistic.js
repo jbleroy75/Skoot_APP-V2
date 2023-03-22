@@ -1,5 +1,5 @@
 import { useFonts } from "expo-font";
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -10,118 +10,135 @@ import {
   Modal,
   TextInput,
 } from "react-native";
+import axios from "axios";
 
-const playersData = [
-  {
-    id: 1,
-    name: "Paul Garcia",
-    position: "Forward",
-    age: 23,
-    logoUri: "/Users/jean-baptisteleroy/SkootProject/assets/549.png",
-    imageUri: "/Users/jean-baptisteleroy/SkootProject/assets/joueur.png",
-  },
-  {
-    id: 2,
-    name: "Alexandre Garcia1",
-    position: "Forward",
-    age: 23,
-    logoUri: "/Users/jean-baptisteleroy/SkootProject/assets/549.png",
-    imageUri: "/Users/jean-baptisteleroy/SkootProject/assets/joueur.png",
-  },
-  {
-    id: 3,
-    name: "Alexandre Garcia1",
-    position: "Forward",
-    age: 23,
-    logoUri: "/Users/jean-baptisteleroy/SkootProject/assets/549.png",
-    imageUri: "/Users/jean-baptisteleroy/SkootProject/assets/joueur.png",
-  },
-  {
-    id: 4,
-    name: "Alexandre Garcia1",
-    position: "Forward",
-    age: 23,
-    logoUri: "/Users/jean-baptisteleroy/SkootProject/assets/549.png",
-    imageUri: "/Users/jean-baptisteleroy/SkootProject/assets/joueur.png",
-  },
-  {
-    id: 5,
-    name: "Alexandre Garcia1",
-    position: "Forward",
-    age: 23,
-    logoUri: "/Users/jean-baptisteleroy/SkootProject/assets/549.png",
-    imageUri: "/Users/jean-baptisteleroy/SkootProject/assets/joueur.png",
-  },
-  {
-    id: 6,
-    name: "Alexandre Garcia1",
-    position: "Forward",
-    age: 23,
-    logoUri: "/Users/jean-baptisteleroy/SkootProject/assets/549.png",
-    imageUri: "/Users/jean-baptisteleroy/SkootProject/assets/joueur.png",
-  },
-  {
-    id: 7,
-    name: "Alexandre Garcia1",
-    position: "Forward",
-    age: 23,
-    logoUri: "/Users/jean-baptisteleroy/SkootProject/assets/549.png",
-    imageUri: "/Users/jean-baptisteleroy/SkootProject/assets/joueur.png",
-  },
-  {
-    id: 8,
-    name: "Alexandre Garcia1",
-    position: "Forward",
-    age: 23,
-    logoUri: "/Users/jean-baptisteleroy/SkootProject/assets/549.png",
-    imageUri: "/Users/jean-baptisteleroy/SkootProject/assets/joueur.png",
-  },
-  {
-    id: 9,
-    name: "Alexandre Garcia1",
-    position: "Forward",
-    age: 23,
-    logoUri: "/Users/jean-baptisteleroy/SkootProject/assets/549.png",
-    imageUri: "/Users/jean-baptisteleroy/SkootProject/assets/joueur.png",
-  },
-  {
-    id: 10,
-    name: "Alexandre Garcia1",
-    position: "Forward",
-    age: 23,
-    logoUri: "/Users/jean-baptisteleroy/SkootProject/assets/549.png",
-    imageUri: "/Users/jean-baptisteleroy/SkootProject/assets/joueur.png",
-  },
-  {
-    id: 11,
-    name: "Alexandre Garcia1",
-    position: "Forward",
-    age: 23,
-    logoUri: "/Users/jean-baptisteleroy/SkootProject/assets/549.png",
-    imageUri: "/Users/jean-baptisteleroy/SkootProject/assets/joueur.png",
-  },
-  {
-    id: 12,
-    name: "Alexandre Garcia1",
-    position: "Forward",
-    age: 23,
-    logoUri: "/Users/jean-baptisteleroy/SkootProject/assets/549.png",
-    imageUri: "/Users/jean-baptisteleroy/SkootProject/assets/joueur.png",
-  },
-];
+// const playersData = [
+//   {
+//     id: 1,
+//     name: "Paul Garcia",
+//     position: "Forward",
+//     age: 23,
+//     logoUri: "/Users/jean-baptisteleroy/SkootProject/assets/549.png",
+//     imageUri: "/Users/jean-baptisteleroy/SkootProject/assets/joueur.png",
+//   },
+//   {
+//     id: 2,
+//     name: "Alexandre Garcia1",
+//     position: "Forward",
+//     age: 23,
+//     logoUri: "/Users/jean-baptisteleroy/SkootProject/assets/549.png",
+//     imageUri: "/Users/jean-baptisteleroy/SkootProject/assets/joueur.png",
+//   },
+//   {
+//     id: 3,
+//     name: "Alexandre Garcia1",
+//     position: "Forward",
+//     age: 23,
+//     logoUri: "/Users/jean-baptisteleroy/SkootProject/assets/549.png",
+//     imageUri: "/Users/jean-baptisteleroy/SkootProject/assets/joueur.png",
+//   },
+//   {
+//     id: 4,
+//     name: "Alexandre Garcia1",
+//     position: "Forward",
+//     age: 23,
+//     logoUri: "/Users/jean-baptisteleroy/SkootProject/assets/549.png",
+//     imageUri: "/Users/jean-baptisteleroy/SkootProject/assets/joueur.png",
+//   },
+//   {
+//     id: 5,
+//     name: "Alexandre Garcia1",
+//     position: "Forward",
+//     age: 23,
+//     logoUri: "/Users/jean-baptisteleroy/SkootProject/assets/549.png",
+//     imageUri: "/Users/jean-baptisteleroy/SkootProject/assets/joueur.png",
+//   },
+//   {
+//     id: 6,
+//     name: "Alexandre Garcia1",
+//     position: "Forward",
+//     age: 23,
+//     logoUri: "/Users/jean-baptisteleroy/SkootProject/assets/549.png",
+//     imageUri: "/Users/jean-baptisteleroy/SkootProject/assets/joueur.png",
+//   },
+//   {
+//     id: 7,
+//     name: "Alexandre Garcia1",
+//     position: "Forward",
+//     age: 23,
+//     logoUri: "/Users/jean-baptisteleroy/SkootProject/assets/549.png",
+//     imageUri: "/Users/jean-baptisteleroy/SkootProject/assets/joueur.png",
+//   },
+//   {
+//     id: 8,
+//     name: "Alexandre Garcia1",
+//     position: "Forward",
+//     age: 23,
+//     logoUri: "/Users/jean-baptisteleroy/SkootProject/assets/549.png",
+//     imageUri: "/Users/jean-baptisteleroy/SkootProject/assets/joueur.png",
+//   },
+//   {
+//     id: 9,
+//     name: "Alexandre Garcia1",
+//     position: "Forward",
+//     age: 23,
+//     logoUri: "/Users/jean-baptisteleroy/SkootProject/assets/549.png",
+//     imageUri: "/Users/jean-baptisteleroy/SkootProject/assets/joueur.png",
+//   },
+//   {
+//     id: 10,
+//     name: "Alexandre Garcia1",
+//     position: "Forward",
+//     age: 23,
+//     logoUri: "/Users/jean-baptisteleroy/SkootProject/assets/549.png",
+//     imageUri: "/Users/jean-baptisteleroy/SkootProject/assets/joueur.png",
+//   },
+//   {
+//     id: 11,
+//     name: "Alexandre Garcia1",
+//     position: "Forward",
+//     age: 23,
+//     logoUri: "/Users/jean-baptisteleroy/SkootProject/assets/549.png",
+//     imageUri: "/Users/jean-baptisteleroy/SkootProject/assets/joueur.png",
+//   },
+//   {
+//     id: 12,
+//     name: "Alexandre Garcia1",
+//     position: "Forward",
+//     age: 23,
+//     logoUri: "/Users/jean-baptisteleroy/SkootProject/assets/549.png",
+//     imageUri: "/Users/jean-baptisteleroy/SkootProject/assets/joueur.png",
+//   },
+// ];
 
 const handlePlayerPress = (player, navigation) => {
   navigation.navigate("PlayerData", { player });
 };
 
 const ScreenPlayerStatistic = ({ navigation }) => {
-  const [modalVisible, setModalVisible] = React.useState(false);
-  const [searchTerm, setSearchTerm] = React.useState("");
-  const [currentPage, setCurrentPage] = React.useState(0);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(0);
+  const [info, setInfo] = useState([]);
 
-  const filteredPlayers = playersData.filter((player) =>
-    player.name.includes(searchTerm)
-  );
+  const fetchPlayers = async () => {
+    try {
+      const res = await axios.get(
+        `https://7c87-91-68-214-149.eu.ngrok.io/data`
+      );
+      setInfo(res.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchPlayers();
+  }, []);
+
+  // const filteredPlayers = playersData.filter((player) =>
+  //   player.name.includes(searchTerm)
+  // );
 
   const handleNextPage = () => {
     setCurrentPage(currentPage + 1);
@@ -134,10 +151,10 @@ const ScreenPlayerStatistic = ({ navigation }) => {
   const playersPerPage = 10;
   const indexOfLastPlayer = (currentPage + 1) * playersPerPage;
   const indexOfFirstPlayer = indexOfLastPlayer - playersPerPage;
-  const displayedPlayers = filteredPlayers.slice(
-    indexOfFirstPlayer,
-    indexOfLastPlayer
-  );
+  // const displayedPlayers = filteredPlayers.slice(
+  //   indexOfFirstPlayer,
+  //   indexOfLastPlayer
+  // );
 
   return (
     <View style={styles.container}>
@@ -156,7 +173,7 @@ const ScreenPlayerStatistic = ({ navigation }) => {
           setModalVisible(!modalVisible);
         }}>
         <View style={styles.modalView}>
-          <Text style={styles.modalTitle}>Filters</Text>
+          <Text style={styles.modalTitle}></Text>
           <TouchableOpacity
             onPress={() => setModalVisible(false)}
             style={styles.closeButton}>
@@ -173,10 +190,10 @@ const ScreenPlayerStatistic = ({ navigation }) => {
           placeholder="Search by name"
         />
       </View>
-      <ScrollView
+      {/* <ScrollView
         style={styles.playersList}
-        contentContainerStyle={{ alignItems: "center" }}>
-        {displayedPlayers.map((player) => (
+        contentContainerStyle={{ alignItems: "center" }}> */}
+      {/* {displayedPlayers.map((player) => (
           <TouchableOpacity
             key={player.id}
             onPress={() => handlePlayerPress(player, navigation)}>
@@ -197,8 +214,31 @@ const ScreenPlayerStatistic = ({ navigation }) => {
               </View>
             </View>
           </TouchableOpacity>
-        ))}
-      </ScrollView>
+        ))} */}
+      {/* </ScrollView> */}
+
+      {/* <ScrollView> */}
+      {info.map((player) => (
+        //   key={player.id}
+        //   //style={styles.playerContainer}
+        //   onPress={() => handlePlayerPress(player, navigation)}>
+        //   <Image source={{ uri: player.imageUri }} style={styles.playerImage} />
+
+        //   <View style={styles.playerInfo}>
+        //     <Text style={styles.playerName}>{player.name}</Text>
+        //     <Text style={styles.playerPosition}>{player.position}</Text>
+        //     <Text style={styles.playerAge}>{player.age}</Text>
+        //   </View>
+        <TouchableOpacity
+          key={player.id}
+          onPress={() => handlePlayerPress(player, navigation)}>
+          <View>
+            <Text>{player.player}</Text>
+          </View>
+        </TouchableOpacity>
+      ))}
+
+      {/* </ScrollView> */}
       <View style={styles.pagination}>
         <TouchableOpacity
           style={[
@@ -213,7 +253,7 @@ const ScreenPlayerStatistic = ({ navigation }) => {
           />
         </TouchableOpacity>
 
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={[
             styles.paginationButton,
             currentPage ===
@@ -229,7 +269,7 @@ const ScreenPlayerStatistic = ({ navigation }) => {
             source={require("./assets/chevron-right.png")}
             style={styles.paginationButtonImage}
           />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
     </View>
   );
@@ -416,18 +456,22 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     marginTop: 20,
     marginLeft: 100,
+    alignItems: "center",
   },
+
   paginationButton: {
     backgroundColor: "#414158",
     borderRadius: 100,
-    marginRight: 100,
+    marginRight: 80,
+    alignItems: "center",
+    flexDirection: "row",
   },
   paginationButtonText: {
     color: "#FFFFFF",
     fontWeight: "bold",
   },
   disabled: {
-    backgroundColor: "#797979",
+    backgroundColor: "#181928",
   },
 });
 
