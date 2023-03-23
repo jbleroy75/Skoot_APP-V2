@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -8,128 +8,86 @@ import {
   ScrollView,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import axios from "axios";
 
 const TeamFavoris = ({ navigation }) => {
-  const [players, setPlayers] = useState([
-    {
-      id: "1",
-      name: "Lionel Messi",
-      image: require("./assets/joueur.png"),
-      description:
-        "Lionel Messi is an Argentine professional footballer who plays as a forward for Paris Saint-Germain and the Argentina national team.",
-      isSaved: true,
-    },
+  const [playersFetch, setPlayersFetch] = useState([]);
 
-    {
-      id: "2",
-      name: "Cristiano Ronaldo",
-      image: require("./assets/joueur.png"),
-      description:
-        "Cristiano Ronaldo is a Portuguese professional footballer who plays as a forward for Manchester United and the Portugal national team.",
-      isSaved: true,
-    },
-    {
-      id: "3",
-      name: "Cristiano Ronaldo",
-      image: require("./assets/joueur.png"),
-      description:
-        "Cristiano Ronaldo is a Portuguese professional footballer who plays as a forward for Manchester United and the Portugal national team.",
-      isSaved: true,
-    },
-    {
-      id: "4",
-      name: "Cristiano Ronaldo",
-      image: require("./assets/joueur.png"),
-      description:
-        "Cristiano Ronaldo is a Portuguese professional footballer who plays as a forward for Manchester United and the Portugal national team.",
-      isSaved: true,
-    },
-    {
-      id: "5",
-      name: "Cristiano Ronaldo",
-      image: require("./assets/joueur.png"),
-      description:
-        "Cristiano Ronaldo is a Portuguese professional footballer who plays as a forward for Manchester United and the Portugal national team.",
-      isSaved: true,
-    },
-    {
-      id: "6",
-      name: "Cristiano Ronaldo",
-      image: require("./assets/joueur.png"),
-      description:
-        "Cristiano Ronaldo is a Portuguese professional footballer who plays as a forward for Manchester United and the Portugal national team.",
-      isSaved: true,
-    },
-    {
-      id: "7",
-      name: "Cristiano Ronaldo",
-      image: require("./assets/joueur.png"),
-      description:
-        "Cristiano Ronaldo is a Portuguese professional footballer who plays as a forward for Manchester United and the Portugal national team.",
-      isSaved: true,
-    },
-    {
-      id: "8",
-      name: "Cristiano Ronaldo",
-      image: require("./assets/joueur.png"),
-      description:
-        "Cristiano Ronaldo is a Portuguese professional footballer who plays as a forward for Manchester United and the Portugal national team.",
-      isSaved: true,
-    },
-  ]);
+  // const toggleSave = (id) => {
+  //   const updatedPlayers = players.map((player) =>
+  //     player.id === id ? { ...player, isSaved: !player.isSaved } : player
+  //   );
+  //   if (!updatedPlayers.find((player) => player.isSaved)) {
+  //     // if no players are saved, clear the list
+  //     setPlayers([]);
+  //   } else {
+  //     // otherwise, update the list with the modified players array
+  //     setPlayers(updatedPlayers.filter((player) => player.isSaved));
+  //   }
+  // };
 
-  const toggleSave = (id) => {
-    const updatedPlayers = players.map((player) =>
-      player.id === id ? { ...player, isSaved: !player.isSaved } : player
+  // const handlePlayerPress = (player) => {
+  //   navigation.navigate("PlayerData", { player, toggleSave });
+  // // };
+
+  const handleRemovePlayer = async (id, playerName) => {
+    const res = await axios.post(
+      "http://localhost:3300/user/remove-favorite-player",
+      {
+        userId: "641cc0869ed7b4607eafbf87",
+        playerName: playerName,
+      }
     );
-    if (!updatedPlayers.find((player) => player.isSaved)) {
-      // if no players are saved, clear the list
-      setPlayers([]);
-    } else {
-      // otherwise, update the list with the modified players array
-      setPlayers(updatedPlayers.filter((player) => player.isSaved));
-    }
+    const updatedPlayers = playersFetch.filter((player) => player._id !== id);
+    setPlayersFetch(updatedPlayers);
   };
 
-  const handlePlayerPress = (player) => {
-    navigation.navigate("PlayerData", { player, toggleSave });
+  const getFavoris = async () => {
+    const res = await axios.get(
+      "http://localhost:3300/user/get-favorite-players/641cc0869ed7b4607eafbf87"
+    );
+    setPlayersFetch(res.data.data);
   };
 
-  const handleRemovePlayer = (id) => {
-    const updatedPlayers = players.filter((player) => player.id !== id);
-    setPlayers(updatedPlayers);
-  };
+  useEffect(() => {
+    getFavoris();
+  }, []);
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Mon équipe</Text>
-      {players.length > 0 ? (
+      {playersFetch.length > 0 ? (
         <ScrollView
           style={styles.playersList}
           contentContainerStyle={{ alignItems: "center" }}>
-          {players.map((player) => (
-            <TouchableOpacity
-              key={player.id}
-              style={styles.playerContainer}
-              onPress={() => navigation.navigate("PlayerData", { player })}>
+          {playersFetch.map((player) => (
+            <View style={styles.playerContainer} key={player._id}>
               <Image source={player.image} style={styles.image} />
-              <View style={styles.infoContainer}>
-                <Text style={styles.name}>{player.name}</Text>
-              </View>
-              <TouchableOpacity onPress={() => handleRemovePlayer(player.id)}>
-                <Ionicons name="trash" size={24} top={10} color="#FFD700" />
+              <Text style={styles.name}>{player.nom}</Text>
+              <TouchableOpacity
+                onPress={() => handleRemovePlayer(player._id, player.nom)}>
+                <Ionicons
+                  name="trash"
+                  size={24}
+                  top={10}
+                  left={30}
+                  color="#FFD700"
+                />
               </TouchableOpacity>
-            </TouchableOpacity>
+            </View>
           ))}
         </ScrollView>
       ) : (
-        <Text style={styles.emptyMessage}>Aucun joueur enregistré.</Text>
+        <Text style={styles.emptyMessage}>Aucun joueur enregistré 🤕</Text>
       )}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  test: {
+    color: "red",
+  },
   container: {
     flex: 1,
     backgroundColor: "#181928",
@@ -174,6 +132,31 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#ffff",
   },
+
+  emptyMessage: {
+    fontStyle: "normal",
+    fontWeight: "800",
+    fontSize: 15,
+    lineHeight: 30,
+    color: "#fff",
+    justifyContent: "center",
+    marginTop: 250,
+    alignItems: "center",
+  },
 });
 
 export default TeamFavoris;
+
+{
+  /* <ScrollView
+        style={styles.playersList}
+        contentContainerStyle={{ alignItems: "center" }}>
+        {playersFetch.map((player) => (
+          <TouchableOpacity key={player.id} style={styles.playerContainer}>
+            <TouchableOpacity onPress={() => handleRemovePlayer(player.id)}>
+              <Ionicons name="trash" size={24} top={10} color="#FFD700" />
+            </TouchableOpacity>
+          </TouchableOpacity>
+        ))}
+      </ScrollView> */
+}

@@ -7,6 +7,7 @@ import {
   StyleSheet,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import axios from "axios";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
@@ -14,8 +15,11 @@ const SignIn = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const navigation = useNavigation();
 
-  const handleLogin = () => {
-    // Fonction de traitement de la connexion ici
+  const handlesignIn = async () => {
+    const res = await axios.post("http://localhost:3300/user/signin", {
+      email: email,
+      password: password,
+    });
   };
 
   return (
@@ -47,7 +51,7 @@ const SignIn = () => {
             <Text style={styles.checkboxLabel}>Resté connecté</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={handleLogin}>
+        <TouchableOpacity style={styles.button} onPress={handlesignIn}>
           <Text style={styles.buttonText}>S'inscrire</Text>
         </TouchableOpacity>
         <View style={styles.separator} />

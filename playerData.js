@@ -14,7 +14,9 @@ import axios from "axios";
 const PlayerData = ({ route, navigation }) => {
   const { player, toggleSave } = route.params;
   const [isSaved, setIsSaved] = useState(player.isSaved);
+  const [isInFavorite, setIsInFavorite] = useState(false);
   const [info, setInfo] = useState("");
+  const [message, setMessage] = useState("");
   const savePlayer = () => {
     player.isSaved = !player.isSaved;
     setIsSaved(player.isSaved);
@@ -27,7 +29,7 @@ const PlayerData = ({ route, navigation }) => {
   const playerInfo = async () => {
     try {
       const res = await axios.get(
-        `https://7c87-91-68-214-149.eu.ngrok.io/data/${player.player}`
+        `https://ef59-91-68-214-149.eu.ngrok.io/data/${player.player}`
       );
 
       setInfo(res.data);
@@ -36,8 +38,37 @@ const PlayerData = ({ route, navigation }) => {
     }
   };
 
+  const addToFavorite = async () => {
+    if (!isInFavorite) {
+      const res = await axios.post(
+        "http://localhost:3300/user/add-favorite-player",
+        {
+          userId: "641cc0869ed7b4607eafbf87",
+          nomJoueur: info?.[0]?.player,
+        }
+      );
+      setIsInFavorite(true);
+    }
+  };
+
+  const checkIfPlayerIsInFavorite = async () => {
+    const res = await axios.get(
+      `http://localhost:3300/user/check-player-exist/641cc0869ed7b4607eafbf87/${player.player}`
+    );
+    if (res.data.data) {
+      setIsInFavorite(true);
+    }
+    setIsInFavorite(false);
+  };
+  const test = async () => {
+    const res = await axios.get("http://localhost:3300");
+    setMessage(res.data);
+  };
+
   useEffect(() => {
     playerInfo();
+    test();
+    checkIfPlayerIsInFavorite();
   }, []);
 
   return (
@@ -53,11 +84,12 @@ const PlayerData = ({ route, navigation }) => {
         <Text style={styles.title}>Player Statistic</Text>
         <TouchableOpacity onPress={toggleSave}>
           <Ionicons
-            name={isSaved ? "bookmark" : "bookmark-outline"}
+            name={"bookmark"}
             size={24}
             left={-10}
             top={5}
-            color={isSaved ? "#FFD700" : "#ffff"}
+            color={isInFavorite ? "#FFD700" : "#ffff"}
+            onPress={addToFavorite}
           />
         </TouchableOpacity>
       </View>
@@ -109,6 +141,7 @@ const PlayerData = ({ route, navigation }) => {
             <Text style={styles.label}>Team : </Text>
             <Text style={styles.value}>{info?.[0]?.team}</Text>
           </View>
+          <Text>{message}</Text>
         </View>
       </ScrollView>
       {!isSaved && (

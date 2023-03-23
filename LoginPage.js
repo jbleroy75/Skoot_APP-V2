@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import axios from "axios";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -14,8 +15,17 @@ const LoginPage = () => {
   const [stayLoggedIn, setStayLoggedIn] = useState(false);
   const navigation = useNavigation();
 
-  const handleLogin = () => {
-    // Handle login logic here
+  const handleLogin = async () => {
+    try {
+      const res = await axios.post("http://localhost:3300/user/login", {
+        email: email,
+        password: password,
+      });
+      // Si l'authentification est réussie, naviguer vers la page ScreenPlayerStatistic avec les données d'utilisateur
+      navigation.navigate("ScreenPlayerStatistic", { user: res.data });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
