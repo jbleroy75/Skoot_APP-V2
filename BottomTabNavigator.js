@@ -4,7 +4,6 @@ import React, { useState, useEffect } from "react";
 import ScreenPlayerStatistic from "./ScreenPlayerStatistic";
 import ListScreen from "./FAQPage";
 import TeamFavoris from "./TeamFavoris";
-import LoginPage from "./LoginPage";
 import FAQPage from "./FAQPage";
 
 const BookmarkIcon = require("./assets/Bookmark.png");
@@ -21,14 +20,12 @@ const BottomTabNavigator = () => {
         tabBarButton: (props) => {
           const { focused, onPress } = props;
           let iconName;
-          if (route.name === "Home") {
+          if (route.name === "ScreenPlayerStatistic") {
             iconName = HomeIcon;
           } else if (route.name === "List") {
             iconName = DocumentIcon;
           } else if (route.name === "Like") {
             iconName = BookmarkIcon;
-          } else if (route.name === "LoginPage") {
-            iconName = ProfileIcon;
           }
 
           return (
@@ -37,7 +34,8 @@ const BottomTabNavigator = () => {
               style={[
                 styles.tabButton,
                 focused ? styles.activeTabButton : styles.inactiveTabButton,
-              ]}>
+              ]}
+            >
               <Image
                 source={iconName}
                 style={styles.tabIconImage}
@@ -52,11 +50,14 @@ const BottomTabNavigator = () => {
           },
           null,
         ],
-      })}>
-      <Tab.Screen name="Home" component={ScreenPlayerStatistic} />
+      })}
+    >
+      <Tab.Screen
+        name="ScreenPlayerStatistic"
+        component={ScreenPlayerStatistic}
+      />
       <Tab.Screen name="List" component={ListScreen} />
       <Tab.Screen name="Like" component={TeamFavoris} />
-      <Tab.Screen name="LoginPage" component={LoginPage} />
     </Tab.Navigator>
   );
 };

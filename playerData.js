@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { useFocusEffect } from "@react-navigation/native";
 import {
   View,
   Image,
@@ -10,29 +11,21 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import chevronImage from "./assets/chevron-left.png";
 import axios from "axios";
+import UserContext from "./UserContext";
 
 const PlayerData = ({ route, navigation }) => {
-  const { player, toggleSave } = route.params;
+  const { player } = route.params;
   const [isSaved, setIsSaved] = useState(player.isSaved);
   const [isInFavorite, setIsInFavorite] = useState(false);
-  const [info, setInfo] = useState("");
-  const [message, setMessage] = useState("");
-  const savePlayer = () => {
-    player.isSaved = !player.isSaved;
-    setIsSaved(player.isSaved);
-    if (typeof toggleSave === "function") {
-      toggleSave(player.id);
-    } else {
-      console.warn("toggleSave is not a function");
-    }
-  };
+  const [playerInformation, setPlayerInformation] = useState([]);
+  const { user } = useContext(UserContext);
+
   const playerInfo = async () => {
     try {
       const res = await axios.get(
         `https://60cf-91-68-214-149.eu.ngrok.io/data/${player.player}`
       );
-
-      setInfo(res.data);
+      setPlayerInformation(res.data);
     } catch (error) {
       console.error(error);
     }
@@ -43,33 +36,44 @@ const PlayerData = ({ route, navigation }) => {
       const res = await axios.post(
         "http://localhost:3300/user/add-favorite-player",
         {
-          userId: "641cc0869ed7b4607eafbf87",
-          nomJoueur: info?.[0]?.player,
+          userId: user.id,
+          nomJoueur: playerInformation?.[0]?.player,
         }
       );
       setIsInFavorite(true);
+    } else {
+      const res = await axios.post(
+        "http://localhost:3300/user/remove-favorite-player",
+        {
+          userId: user.id,
+          nomJoueur: playerInformation?.[0]?.player,
+        }
+      );
+      setIsInFavorite(false);
     }
   };
 
   const checkIfPlayerIsInFavorite = async () => {
-    const res = await axios.get(
-      `http://localhost:3300/user/check-player-exist/641cc0869ed7b4607eafbf87/${player.player}`
-    );
-    if (res.data.data) {
-      setIsInFavorite(true);
-    }
-    setIsInFavorite(false);
-  };
-  const test = async () => {
-    const res = await axios.get("http://localhost:3300");
-    setMessage(res.data);
+    const res = axios
+      .get(
+        `http://localhost:3300/user/check-player-exist/${user.id}/${player.player}`
+      )
+      .then((res) => {
+        if (res.data.data) {
+          setIsInFavorite(true);
+        }
+      })
+      .catch((error) => {
+        setIsInFavorite(false);
+      });
   };
 
-  useEffect(() => {
-    playerInfo();
-    test();
-    checkIfPlayerIsInFavorite();
-  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      playerInfo();
+      checkIfPlayerIsInFavorite();
+    }, [])
+  );
 
   return (
     <View style={styles.container}>
@@ -78,11 +82,13 @@ const PlayerData = ({ route, navigation }) => {
       <View style={styles.header}>
         <TouchableOpacity
           onPress={() => navigation.goBack()}
-          style={styles.backButton}>
+          style={styles.backButton}
+        >
           <Image source={chevronImage} style={styles.backButtonImage} />
         </TouchableOpacity>
         <Text style={styles.title}>Player Statistic</Text>
-        <TouchableOpacity onPress={toggleSave}>
+
+        <TouchableOpacity>
           <Ionicons
             name={"bookmark"}
             size={24}
@@ -99,7 +105,8 @@ const PlayerData = ({ route, navigation }) => {
             source={require("./assets/joueur.png")}
             style={styles.imageProfile}
           />
-          <Text style={styles.namePlayer}>{info?.[0]?.player}</Text>
+          <Text style={styles.namePlayer}>{playerInformation[0]?.player}</Text>
+          <Text style={styles.positionPlayer}>{playerInformation[0]?.Pos}</Text>
           <View style={styles.scoreContainer}>
             <Image
               source={{
@@ -111,239 +118,236 @@ const PlayerData = ({ route, navigation }) => {
           </View>
         </View>
       </View>
+
       <ScrollView>
         <View style={styles.containerInfo}>
           <View style={styles.elements}>
             <Text style={styles.label}>Age : </Text>
-            <Text style={styles.value}>{info?.[0]?.Age}</Text>
+            <Text style={styles.value}>{playerInformation?.[0]?.Age}</Text>
           </View>
 
           <View style={styles.elements}>
             <Text style={styles.label}>Nationality : </Text>
-            <Text style={styles.value}>{info?.[0]?.Nation}</Text>
+            <Text style={styles.value}>{playerInformation?.[0]?.Nation}</Text>
           </View>
           <View style={styles.elements}>
             <Text style={styles.label}>Position : </Text>
-            <Text style={styles.value}>{info?.[0]?.Pos}</Text>
+            <Text style={styles.value}>{playerInformation?.[0]?.Pos}</Text>
           </View>
           <View style={styles.elements}>
             <Text style={styles.label}>Team : </Text>
-            <Text style={styles.value}>{info?.[0]?.team}</Text>
+            <Text style={styles.value}>{playerInformation?.[0]?.team}</Text>
           </View>
           <View style={styles.elements}>
             <Text style={styles.label}>League : </Text>
-            <Text style={styles.value}>{info?.[0]?.league}</Text>
+            <Text style={styles.value}>{playerInformation?.[0]?.league}</Text>
           </View>
           <View style={styles.elements}>
             <Text style={styles.label}>Season : </Text>
-            <Text style={styles.value}>{info?.[0]?.season}</Text>
+            <Text style={styles.value}>{playerInformation?.[0]?.season}</Text>
           </View>
-          <View style={styles.elements}>
+          {/* <View style={styles.elements}>
             <Text style={styles.label}>Playing Time Matches Played : </Text>
-            <Text style={styles.value}>{info?.[0]["Playing Time MP"]}</Text>
-          </View>
-          <View style={styles.elements}>
+            <Text style={styles.value}>{playerInformation?.[0]["Playing Time MP"]}</Text>
+          </View> */}
+          {/* <View style={styles.elements}>
             <Text style={styles.label}>Playing Time Matches Played : </Text>
-            <Text style={styles.value}>{info?.[0]["Playing Time MP"]}</Text>
+            <Text style={styles.value}>{playerInformation?.[0]["Playing Time MP"]}</Text>
           </View>
           <View style={styles.elements}>
             <Text style={styles.label}>Playing Time Starts : </Text>
-            <Text style={styles.value}>{info?.[0]["Playing Time Starts"]}</Text>
+            <Text style={styles.value}>{playerInformation?.[0]["Playing Time Starts"]}</Text>
           </View>
           <View style={styles.elements}>
             <Text style={styles.label}>Playing Time Min : </Text>
-            <Text style={styles.value}>{info?.[0]["Playing Time Min"]}</Text>
+            <Text style={styles.value}>{playerInformation?.[0]["Playing Time Min"]}</Text>
           </View>
           <View style={styles.elements}>
             <Text style={styles.label}>Playing Time 90s : </Text>
-            <Text style={styles.value}>{info?.[0]["Playing Time 90s"]}</Text>
+            <Text style={styles.value}>{playerInformation?.[0]["Playing Time 90s"]}</Text>
           </View>
           <View style={styles.elements}>
             <Text style={styles.label}>Performance Gls : </Text>
-            <Text style={styles.value}>{info?.[0]["Performance Gls"]}</Text>
+            <Text style={styles.value}>{playerInformation?.[0]["Performance Gls"]}</Text>
           </View>
           <View style={styles.elements}>
             <Text style={styles.label}>Performance Ast : </Text>
-            <Text style={styles.value}>{info?.[0]["Performance Ast"]}</Text>
+            <Text style={styles.value}>{playerInformation?.[0]["Performance Ast"]}</Text>
           </View>
           <View style={styles.elements}>
             <Text style={styles.label}>Performance G+A : </Text>
-            <Text style={styles.value}>{info?.[0]["Performance G+A"]}</Text>
+            <Text style={styles.value}>{playerInformation?.[0]["Performance G+A"]}</Text>
           </View>
           <View style={styles.elements}>
             <Text style={styles.label}>Performance G-PK : </Text>
-            <Text style={styles.value}>{info?.[0]["Performance G-PK"]}</Text>
+            <Text style={styles.value}>{playerInformation?.[0]["Performance G-PK"]}</Text>
           </View>
           <View style={styles.elements}>
             <Text style={styles.label}>Performance PK : </Text>
-            <Text style={styles.value}>{info?.[0]["Performance PK"]}</Text>
+            <Text style={styles.value}>{playerInformation?.[0]["Performance PK"]}</Text>
           </View>
           <View style={styles.elements}>
             <Text style={styles.label}>Performance PKatt : </Text>
-            <Text style={styles.value}>{info?.[0]["Performance PKatt"]}</Text>
+            <Text style={styles.value}>{playerInformation?.[0]["Performance PKatt"]}</Text>
           </View>
           <View style={styles.elements}>
             <Text style={styles.label}>Performance CrdY : </Text>
-            <Text style={styles.value}>{info?.[0]["Performance CrdY"]}</Text>
+            <Text style={styles.value}>{playerInformation?.[0]["Performance CrdY"]}</Text>
           </View>
           <View style={styles.elements}>
             <Text style={styles.label}>Performance CrdR : </Text>
-            <Text style={styles.value}>{info?.[0]["Performance CrdR"]}</Text>
+            <Text style={styles.value}>{playerInformation?.[0]["Performance CrdR"]}</Text>
           </View>
           <View style={styles.elements}>
             <Text style={styles.label}>Expected xG : </Text>
-            <Text style={styles.value}>{info?.[0]["Expected xG"]}</Text>
+            <Text style={styles.value}>{playerInformation?.[0]["Expected xG"]}</Text>
           </View>
           <View style={styles.elements}>
             <Text style={styles.label}>Expected npxG : </Text>
-            <Text style={styles.value}>{info?.[0]["Expected npxG"]}</Text>
+            <Text style={styles.value}>{playerInformation?.[0]["Expected npxG"]}</Text>
           </View>
           <View style={styles.elements}>
             <Text style={styles.label}>Expected xAG : </Text>
-            <Text style={styles.value}>{info?.[0]["Expected xAG"]}</Text>
+            <Text style={styles.value}>{playerInformation?.[0]["Expected xAG"]}</Text>
           </View>
           <View style={styles.elements}>
             <Text style={styles.label}>Expected npxG+xAG : </Text>
-            <Text style={styles.value}>{info?.[0]["Expected npxG+xAG"]}</Text>
+            <Text style={styles.value}>{playerInformation?.[0]["Expected npxG+xAG"]}</Text>
           </View>
           <View style={styles.elements}>
             <Text style={styles.label}>Progression PrgC : </Text>
-            <Text style={styles.value}>{info?.[0]["Progression PrgC"]}</Text>
+            <Text style={styles.value}>{playerInformation?.[0]["Progression PrgC"]}</Text>
           </View>
           <View style={styles.elements}>
             <Text style={styles.label}>Playing Time Starts : </Text>
-            <Text style={styles.value}>{info?.[0]["Playing Time Starts"]}</Text>
+            <Text style={styles.value}>{playerInformation?.[0]["Playing Time Starts"]}</Text>
           </View>
           <View style={styles.elements}>
             <Text style={styles.label}>Playing Time Minutes : </Text>
-            <Text style={styles.value}>{info?.[0]["Playing Time Min"]}</Text>
+            <Text style={styles.value}>{playerInformation?.[0]["Playing Time Min"]}</Text>
           </View>
           <View style={styles.elements}>
             <Text style={styles.label}>Playing Time 90s : </Text>
-            <Text style={styles.value}>{info?.[0]["Playing Time 90s"]}</Text>
+            <Text style={styles.value}>{playerInformation?.[0]["Playing Time 90s"]}</Text>
           </View>
           <View style={styles.elements}>
             <Text style={styles.label}>Performance Goals : </Text>
-            <Text style={styles.value}>{info?.[0]["Performance Gls"]}</Text>
+            <Text style={styles.value}>{playerInformation?.[0]["Performance Gls"]}</Text>
           </View>
           <View style={styles.elements}>
             <Text style={styles.label}>Performance Assists : </Text>
-            <Text style={styles.value}>{info?.[0]["Performance Ast"]}</Text>
+            <Text style={styles.value}>{playerInformation?.[0]["Performance Ast"]}</Text>
           </View>
           <View style={styles.elements}>
             <Text style={styles.label}>Performance Goals + Assists : </Text>
-            <Text style={styles.value}>{info?.[0]["Performance G+A"]}</Text>
+            <Text style={styles.value}>{playerInformation?.[0]["Performance G+A"]}</Text>
           </View>
           <View style={styles.elements}>
             <Text style={styles.label}>Performance Goals - Penalty : </Text>
-            <Text style={styles.value}>{info?.[0]["Performance G-PK"]}</Text>
+            <Text style={styles.value}>{playerInformation?.[0]["Performance G-PK"]}</Text>
           </View>
           <View style={styles.elements}>
             <Text style={styles.label}>Performance Penalty Kicks : </Text>
-            <Text style={styles.value}>{info?.[0]["Performance PK"]}</Text>
+            <Text style={styles.value}>{playerInformation?.[0]["Performance PK"]}</Text>
           </View>
           <View style={styles.elements}>
             <Text style={styles.label}>
               Performance Penalty Kicks Attempted :{" "}
             </Text>
-            <Text style={styles.value}>{info?.[0]["Performance PKatt"]}</Text>
+            <Text style={styles.value}>{playerInformation?.[0]["Performance PKatt"]}</Text>
           </View>
           <View style={styles.elements}>
             <Text style={styles.label}>Performance Yellow Cards : </Text>
-            <Text style={styles.value}>{info?.[0]["Performance CrdY"]}</Text>
+            <Text style={styles.value}>{playerInformation?.[0]["Performance CrdY"]}</Text>
           </View>
           <View style={styles.elements}>
             <Text style={styles.label}>Performance Red Cards : </Text>
-            <Text style={styles.value}>{info?.[0]["Performance CrdR"]}</Text>
+            <Text style={styles.value}>{playerInformation?.[0]["Performance CrdR"]}</Text>
           </View>
           <View style={styles.elements}>
             <Text style={styles.label}>Expected xG : </Text>
-            <Text style={styles.value}>{info?.[0]["Expected xG"]}</Text>
+            <Text style={styles.value}>{playerInformation?.[0]["Expected xG"]}</Text>
           </View>
           <View style={styles.elements}>
             <Text style={styles.label}>Expected npxG : </Text>
-            <Text style={styles.value}>{info?.[0]["Expected npxG"]}</Text>
+            <Text style={styles.value}>{playerInformation?.[0]["Expected npxG"]}</Text>
           </View>
           <View style={styles.elements}>
             <Text style={styles.label}>Expected xAG : </Text>
-            <Text style={styles.value}>{info?.[0]["Expected xAG"]}</Text>
+            <Text style={styles.value}>{playerInformation?.[0]["Expected xAG"]}</Text>
           </View>
           <View style={styles.elements}>
             <Text style={styles.label}>Expected npxG + xAG : </Text>
-            <Text style={styles.value}>{info?.[0]["Expected npxG+xAG"]}</Text>
+            <Text style={styles.value}>{playerInformation?.[0]["Expected npxG+xAG"]}</Text>
           </View>
           <View style={styles.elements}>
             <Text style={styles.label}>Progression PrgC : </Text>
-            <Text style={styles.value}>{info?.[0]["Progression PrgC"]}</Text>
+            <Text style={styles.value}>{playerInformation?.[0]["Progression PrgC"]}</Text>
           </View>
           <View style={styles.elements}>
             <Text style={styles.label}>Progression PrgC : </Text>
-            <Text style={styles.value}>{info?.[0]["Progression PrgC"]}</Text>
+            <Text style={styles.value}>{playerInformation?.[0]["Progression PrgC"]}</Text>
           </View>
           <View style={styles.elements}>
             <Text style={styles.label}>Progression PrgP : </Text>
-            <Text style={styles.value}>{info?.[0]["Progression PrgP"]}</Text>
+            <Text style={styles.value}>{playerInformation?.[0]["Progression PrgP"]}</Text>
           </View>
           <View style={styles.elements}>
             <Text style={styles.label}>Progression PrgR : </Text>
-            <Text style={styles.value}>{info?.[0]["Progression PrgR"]}</Text>
+            <Text style={styles.value}>{playerInformation?.[0]["Progression PrgR"]}</Text>
           </View>
           <View style={styles.elements}>
             <Text style={styles.label}>Per 90 Minutes Gls : </Text>
-            <Text style={styles.value}>{info?.[0]["Per 90 Minutes Gls"]}</Text>
+            <Text style={styles.value}>{playerInformation?.[0]["Per 90 Minutes Gls"]}</Text>
           </View>
           <View style={styles.elements}>
             <Text style={styles.label}>Per 90 Minutes Ast : </Text>
-            <Text style={styles.value}>{info?.[0]["Per 90 Minutes Ast"]}</Text>
+            <Text style={styles.value}>{playerInformation?.[0]["Per 90 Minutes Ast"]}</Text>
           </View>
           <View style={styles.elements}>
             <Text style={styles.label}>Per 90 Minutes G+A : </Text>
-            <Text style={styles.value}>{info?.[0]["Per 90 Minutes G+A"]}</Text>
+            <Text style={styles.value}>{playerInformation?.[0]["Per 90 Minutes G+A"]}</Text>
           </View>
           <View style={styles.elements}>
             <Text style={styles.label}>Per 90 Minutes G-PK : </Text>
-            <Text style={styles.value}>{info?.[0]["Per 90 Minutes G-PK"]}</Text>
+            <Text style={styles.value}>{playerInformation?.[0]["Per 90 Minutes G-PK"]}</Text>
           </View>
           <View style={styles.elements}>
             <Text style={styles.label}>Per 90 Minutes G+A-PK : </Text>
             <Text style={styles.value}>
-              {info?.[0]["Per 90 Minutes G+A-PK"]}
+              {playerInformation?.[0]["Per 90 Minutes G+A-PK"]}
             </Text>
           </View>
           <View style={styles.elements}>
             <Text style={styles.label}>Per 90 Minutes xG : </Text>
-            <Text style={styles.value}>{info?.[0]["Per 90 Minutes xG"]}</Text>
+            <Text style={styles.value}>{playerInformation?.[0]["Per 90 Minutes xG"]}</Text>
           </View>
           <View style={styles.elements}>
             <Text style={styles.label}>Per 90 Minutes xAG : </Text>
-            <Text style={styles.value}>{info?.[0]["Per 90 Minutes xAG"]}</Text>
+            <Text style={styles.value}>{playerInformation?.[0]["Per 90 Minutes xAG"]}</Text>
           </View>
           <View style={styles.elements}>
             <Text style={styles.label}>Per 90 Minutes xG+xAG : </Text>
             <Text style={styles.value}>
-              {info?.[0]["Per 90 Minutes xG+xAG"]}
+              {playerInformation?.[0]["Per 90 Minutes xG+xAG"]}
             </Text>
           </View>
           <View style={styles.elements}>
             <Text style={styles.label}>Per 90 Minutes npxG : </Text>
-            <Text style={styles.value}>{info?.[0]["Per 90 Minutes npxG"]}</Text>
+            <Text style={styles.value}>{playerInformation?.[0]["Per 90 Minutes npxG"]}</Text>
           </View>
           <View style={styles.elements}>
             <Text style={styles.label}>Per 90 Minutes npxG+xAG : </Text>
             <Text style={styles.value}>
-              {info?.[0]["Per 90 Minutes npxG+xAG"]}
+              {playerInformation?.[0]["Per 90 Minutes npxG+xAG"]}
             </Text>
-          </View>
+          </View> */}
         </View>
       </ScrollView>
-      {!isSaved && (
-        <TouchableOpacity style={styles.saveButton} onPress={savePlayer}>
-          <Text style={styles.saveButtonText}>Ajouter aux favoris</Text>
-        </TouchableOpacity>
-      )}
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,

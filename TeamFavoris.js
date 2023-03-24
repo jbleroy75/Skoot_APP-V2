@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useContext, useCallback } from "react";
+import { useFocusEffect } from "@react-navigation/native";
 import {
   View,
   Text,
@@ -9,9 +10,11 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import axios from "axios";
+import UserContext from "./UserContext";
 
 const TeamFavoris = ({ navigation }) => {
   const [playersFetch, setPlayersFetch] = useState([]);
+  const { user } = useContext(UserContext);
 
   // const toggleSave = (id) => {
   //   const updatedPlayers = players.map((player) =>
@@ -34,7 +37,7 @@ const TeamFavoris = ({ navigation }) => {
     const res = await axios.post(
       "http://localhost:3300/user/remove-favorite-player",
       {
-        userId: "641cc0869ed7b4607eafbf87",
+        userId: user.id,
         playerName: playerName,
       }
     );
@@ -44,28 +47,33 @@ const TeamFavoris = ({ navigation }) => {
 
   const getFavoris = async () => {
     const res = await axios.get(
-      "http://localhost:3300/user/get-favorite-players/641cc0869ed7b4607eafbf87"
+      `http://localhost:3300/user/get-favorite-players/${user.id}`
     );
     setPlayersFetch(res.data.data);
   };
 
-  useEffect(() => {
-    getFavoris();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      getFavoris();
+    }, [])
+  );
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Mon équipe</Text>
+
       {playersFetch.length > 0 ? (
         <ScrollView
           style={styles.playersList}
-          contentContainerStyle={{ alignItems: "center" }}>
+          contentContainerStyle={{ alignItems: "center" }}
+        >
           {playersFetch.map((player) => (
             <View style={styles.playerContainer} key={player._id}>
               <Image source={player.image} style={styles.image} />
               <Text style={styles.name}>{player.nom}</Text>
               <TouchableOpacity
-                onPress={() => handleRemovePlayer(player._id, player.nom)}>
+                onPress={() => handleRemovePlayer(player._id, player.nom)}
+              >
                 <Ionicons
                   name="trash"
                   size={24}

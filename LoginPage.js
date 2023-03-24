@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   StyleSheet,
   View,
@@ -8,12 +8,16 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
+import UserContext from "./UserContext";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [stayLoggedIn, setStayLoggedIn] = useState(false);
   const navigation = useNavigation();
+  const { setIsAuthenticated } = useContext(UserContext);
+
+  const { user, setUser } = useContext(UserContext);
 
   const handleLogin = async () => {
     try {
@@ -21,16 +25,27 @@ const LoginPage = () => {
         email: email,
         password: password,
       });
-      // Si l'authentification est réussie, naviguer vers la page ScreenPlayerStatistic avec les données d'utilisateur
-      navigation.navigate("ScreenPlayerStatistic", { user: res.data });
+
+      if (res.data.success) {
+        const user = res.data.data;
+        setUser({
+          id: user._id,
+          email: user.email,
+        });
+        setIsAuthenticated(true);
+        navigation.navigate("ScreenPlayerStatistic");
+      } else {
+        alert(res.data.message);
+      }
     } catch (error) {
-      console.log(error);
+      alert(error);
     }
   };
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Connexion</Text>
+
       <TextInput
         style={styles.input}
         value={email}
@@ -57,7 +72,8 @@ const LoginPage = () => {
           <Text style={styles.stayLoggedInText}>Resté connecté</Text>
           <TouchableOpacity
             style={styles.stayLoggedInToggle}
-            onPress={() => setStayLoggedIn(!stayLoggedIn)}>
+            onPress={() => setStayLoggedIn(!stayLoggedIn)}
+          >
             <View
               style={[
                 styles.stayLoggedInToggleCircle,

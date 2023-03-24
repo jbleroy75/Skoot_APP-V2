@@ -1,5 +1,6 @@
 import { useFonts } from "expo-font";
-import React, { useState, useEffect } from "react";
+import React, { useState, useContext } from "react";
+import { useFocusEffect } from "@react-navigation/native";
 import {
   View,
   Text,
@@ -12,15 +13,15 @@ import {
 } from "react-native";
 import axios from "axios";
 
-const handlePlayerPress = (player, navigation) => {
-  navigation.navigate("PlayerData", { player });
-};
-
 const ScreenPlayerStatistic = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(0);
   const [info, setInfo] = useState([]);
+
+  const handlePlayerPress = (player, navigation) => {
+    navigation.navigate("PlayerData", { player });
+  };
 
   const fetchPlayers = async () => {
     try {
@@ -33,13 +34,11 @@ const ScreenPlayerStatistic = ({ navigation }) => {
     }
   };
 
-  useEffect(() => {
-    fetchPlayers();
-  }, []);
-
-  // const filteredPlayers = playersData.filter((player) =>
-  //   player.name.includes(searchTerm)
-  // );
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchPlayers();
+    }, [])
+  );
 
   const handleNextPage = () => {
     setCurrentPage(currentPage + 1);
@@ -52,17 +51,13 @@ const ScreenPlayerStatistic = ({ navigation }) => {
   const playersPerPage = 10;
   const indexOfLastPlayer = (currentPage + 1) * playersPerPage;
   const indexOfFirstPlayer = indexOfLastPlayer - playersPerPage;
-  // const displayedPlayers = filteredPlayers.slice(
-  //   indexOfFirstPlayer,
-  //   indexOfLastPlayer
-  // );
-
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Players</Text>
       <TouchableOpacity
         onPress={() => setModalVisible(true)}
-        style={styles.filterButton}>
+        style={styles.filterButton}
+      >
         <Text style={styles.filterButtonText}>Filter</Text>
       </TouchableOpacity>
       <Modal
@@ -71,12 +66,14 @@ const ScreenPlayerStatistic = ({ navigation }) => {
         visible={modalVisible}
         onRequestClose={() => {
           setModalVisible(!modalVisible);
-        }}>
+        }}
+      >
         <View style={styles.modalView}>
           <Text style={styles.modalTitle}></Text>
           <TouchableOpacity
             onPress={() => setModalVisible(false)}
-            style={styles.closeButton}>
+            style={styles.closeButton}
+          >
             <Text style={styles.closeButtonText}>Close</Text>
           </TouchableOpacity>
         </View>
@@ -91,13 +88,14 @@ const ScreenPlayerStatistic = ({ navigation }) => {
       </View>
       <ScrollView
         style={styles.playersList}
-        contentContainerStyle={{ alignItems: "center" }}>
+        contentContainerStyle={{ alignItems: "center" }}
+      >
         {info.map((player) => (
           <TouchableOpacity
-            key={player.id}
-            //style={styles.playerContainer}
-            onPress={() => handlePlayerPress(player, navigation)}>
-            <View key={player.id} style={styles.playerContainer}>
+            key={player.player} // <-- Utiliser une propriété unique pour chaque objet
+            onPress={() => handlePlayerPress(player, navigation)}
+          >
+            <View style={styles.playerContainer}>
               <View style={styles.logoContainer}>
                 <Image source={{ uri: player.logoUri }} style={styles.logo} />
               </View>
@@ -116,7 +114,27 @@ const ScreenPlayerStatistic = ({ navigation }) => {
           </TouchableOpacity>
         ))}
       </ScrollView>
+
       {/* PAGINATION */}
+      {/* <View style={styles.paginationContainer}>
+        {currentPage !== 0 && (
+          <TouchableOpacity
+            onPress={handlePrevPage}
+            style={styles.paginationButton}
+          >
+            <Text style={styles.paginationText}>Prev</Text>
+          </TouchableOpacity>
+        )}
+
+        {info.length > (currentPage + 1) * playersPerPage && (
+          <TouchableOpacity
+            onPress={handleNextPage}
+            style={styles.paginationButton}
+          >
+            <Text style={styles.paginationText}>Next</Text>
+          </TouchableOpacity>
+        )}
+      </View> */}
     </View>
   );
 };
@@ -319,38 +337,3 @@ const styles = StyleSheet.create({
 });
 
 export default ScreenPlayerStatistic;
-
-// {/* </ScrollView> */}
-// <View style={styles.pagination}>
-//   <TouchableOpacity
-//     style={[
-//       styles.paginationButton,
-//       currentPage === 0 && styles.disabled,
-//     ]}
-//     onPress={handlePrevPage}
-//     disabled={currentPage === 0}>
-//     <Image
-//       source={require("./assets/chevron-left.png")}
-//       style={styles.chevronImage}
-//     />
-//   </TouchableOpacity>
-
-// </View>
-// CODE pagination
-// <TouchableOpacity
-//           style={[
-//             styles.paginationButton,
-//             currentPage ===
-//               Math.ceil(filteredPlayers.length / playersPerPage) - 1 &&
-//               styles.disabled,
-//           ]}
-//           onPress={handleNextPage}
-//           disabled={
-//             currentPage ===
-//             Math.ceil(filteredPlayers.length / playersPerPage) - 1
-//           }>
-//           <Image
-//             source={require("./assets/chevron-right.png")}
-//             style={styles.paginationButtonImage}
-//           />
-//         </TouchableOpacity>
