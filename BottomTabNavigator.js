@@ -2,9 +2,10 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { TouchableOpacity, StyleSheet, Image } from "react-native";
 import React, { useState, useEffect } from "react";
 import ScreenPlayerStatistic from "./ScreenPlayerStatistic";
-import ListScreen from "./ListScreen";
+import ListScreen from "./FAQPage";
 import TeamFavoris from "./TeamFavoris";
 import LoginPage from "./LoginPage";
+import FAQPage from "./FAQPage";
 
 const BookmarkIcon = require("./assets/Bookmark.png");
 const DocumentIcon = require("./assets/Document.png");

@@ -25,7 +25,7 @@ const ScreenPlayerStatistic = ({ navigation }) => {
   const fetchPlayers = async () => {
     try {
       const res = await axios.get(
-        `https://ef59-91-68-214-149.eu.ngrok.io/data`
+        `https://60cf-91-68-214-149.eu.ngrok.io/data`
       );
       setInfo(res.data);
     } catch (error) {

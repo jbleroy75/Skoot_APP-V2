@@ -29,7 +29,7 @@ const PlayerData = ({ route, navigation }) => {
   const playerInfo = async () => {
     try {
       const res = await axios.get(
-        `https://ef59-91-68-214-149.eu.ngrok.io/data/${player.player}`
+        `https://60cf-91-68-214-149.eu.ngrok.io/data/${player.player}`
       );
 
       setInfo(res.data);
@@ -114,16 +114,17 @@ const PlayerData = ({ route, navigation }) => {
       <ScrollView>
         <View style={styles.containerInfo}>
           <View style={styles.elements}>
-            <Text style={styles.label}>Position : </Text>
-            <Text style={styles.value}>{info?.[0]?.Pos}</Text>
+            <Text style={styles.label}>Age : </Text>
+            <Text style={styles.value}>{info?.[0]?.Age}</Text>
           </View>
+
           <View style={styles.elements}>
             <Text style={styles.label}>Nationality : </Text>
             <Text style={styles.value}>{info?.[0]?.Nation}</Text>
           </View>
           <View style={styles.elements}>
-            <Text style={styles.label}>Age : </Text>
-            <Text style={styles.value}>{info?.[0]?.Age}</Text>
+            <Text style={styles.label}>Position : </Text>
+            <Text style={styles.value}>{info?.[0]?.Pos}</Text>
           </View>
           <View style={styles.elements}>
             <Text style={styles.label}>Team : </Text>
@@ -138,10 +139,201 @@ const PlayerData = ({ route, navigation }) => {
             <Text style={styles.value}>{info?.[0]?.season}</Text>
           </View>
           <View style={styles.elements}>
-            <Text style={styles.label}>Team : </Text>
-            <Text style={styles.value}>{info?.[0]?.team}</Text>
+            <Text style={styles.label}>Playing Time Matches Played : </Text>
+            <Text style={styles.value}>{info?.[0]["Playing Time MP"]}</Text>
           </View>
-          <Text>{message}</Text>
+          <View style={styles.elements}>
+            <Text style={styles.label}>Playing Time Matches Played : </Text>
+            <Text style={styles.value}>{info?.[0]["Playing Time MP"]}</Text>
+          </View>
+          <View style={styles.elements}>
+            <Text style={styles.label}>Playing Time Starts : </Text>
+            <Text style={styles.value}>{info?.[0]["Playing Time Starts"]}</Text>
+          </View>
+          <View style={styles.elements}>
+            <Text style={styles.label}>Playing Time Min : </Text>
+            <Text style={styles.value}>{info?.[0]["Playing Time Min"]}</Text>
+          </View>
+          <View style={styles.elements}>
+            <Text style={styles.label}>Playing Time 90s : </Text>
+            <Text style={styles.value}>{info?.[0]["Playing Time 90s"]}</Text>
+          </View>
+          <View style={styles.elements}>
+            <Text style={styles.label}>Performance Gls : </Text>
+            <Text style={styles.value}>{info?.[0]["Performance Gls"]}</Text>
+          </View>
+          <View style={styles.elements}>
+            <Text style={styles.label}>Performance Ast : </Text>
+            <Text style={styles.value}>{info?.[0]["Performance Ast"]}</Text>
+          </View>
+          <View style={styles.elements}>
+            <Text style={styles.label}>Performance G+A : </Text>
+            <Text style={styles.value}>{info?.[0]["Performance G+A"]}</Text>
+          </View>
+          <View style={styles.elements}>
+            <Text style={styles.label}>Performance G-PK : </Text>
+            <Text style={styles.value}>{info?.[0]["Performance G-PK"]}</Text>
+          </View>
+          <View style={styles.elements}>
+            <Text style={styles.label}>Performance PK : </Text>
+            <Text style={styles.value}>{info?.[0]["Performance PK"]}</Text>
+          </View>
+          <View style={styles.elements}>
+            <Text style={styles.label}>Performance PKatt : </Text>
+            <Text style={styles.value}>{info?.[0]["Performance PKatt"]}</Text>
+          </View>
+          <View style={styles.elements}>
+            <Text style={styles.label}>Performance CrdY : </Text>
+            <Text style={styles.value}>{info?.[0]["Performance CrdY"]}</Text>
+          </View>
+          <View style={styles.elements}>
+            <Text style={styles.label}>Performance CrdR : </Text>
+            <Text style={styles.value}>{info?.[0]["Performance CrdR"]}</Text>
+          </View>
+          <View style={styles.elements}>
+            <Text style={styles.label}>Expected xG : </Text>
+            <Text style={styles.value}>{info?.[0]["Expected xG"]}</Text>
+          </View>
+          <View style={styles.elements}>
+            <Text style={styles.label}>Expected npxG : </Text>
+            <Text style={styles.value}>{info?.[0]["Expected npxG"]}</Text>
+          </View>
+          <View style={styles.elements}>
+            <Text style={styles.label}>Expected xAG : </Text>
+            <Text style={styles.value}>{info?.[0]["Expected xAG"]}</Text>
+          </View>
+          <View style={styles.elements}>
+            <Text style={styles.label}>Expected npxG+xAG : </Text>
+            <Text style={styles.value}>{info?.[0]["Expected npxG+xAG"]}</Text>
+          </View>
+          <View style={styles.elements}>
+            <Text style={styles.label}>Progression PrgC : </Text>
+            <Text style={styles.value}>{info?.[0]["Progression PrgC"]}</Text>
+          </View>
+          <View style={styles.elements}>
+            <Text style={styles.label}>Playing Time Starts : </Text>
+            <Text style={styles.value}>{info?.[0]["Playing Time Starts"]}</Text>
+          </View>
+          <View style={styles.elements}>
+            <Text style={styles.label}>Playing Time Minutes : </Text>
+            <Text style={styles.value}>{info?.[0]["Playing Time Min"]}</Text>
+          </View>
+          <View style={styles.elements}>
+            <Text style={styles.label}>Playing Time 90s : </Text>
+            <Text style={styles.value}>{info?.[0]["Playing Time 90s"]}</Text>
+          </View>
+          <View style={styles.elements}>
+            <Text style={styles.label}>Performance Goals : </Text>
+            <Text style={styles.value}>{info?.[0]["Performance Gls"]}</Text>
+          </View>
+          <View style={styles.elements}>
+            <Text style={styles.label}>Performance Assists : </Text>
+            <Text style={styles.value}>{info?.[0]["Performance Ast"]}</Text>
+          </View>
+          <View style={styles.elements}>
+            <Text style={styles.label}>Performance Goals + Assists : </Text>
+            <Text style={styles.value}>{info?.[0]["Performance G+A"]}</Text>
+          </View>
+          <View style={styles.elements}>
+            <Text style={styles.label}>Performance Goals - Penalty : </Text>
+            <Text style={styles.value}>{info?.[0]["Performance G-PK"]}</Text>
+          </View>
+          <View style={styles.elements}>
+            <Text style={styles.label}>Performance Penalty Kicks : </Text>
+            <Text style={styles.value}>{info?.[0]["Performance PK"]}</Text>
+          </View>
+          <View style={styles.elements}>
+            <Text style={styles.label}>
+              Performance Penalty Kicks Attempted :{" "}
+            </Text>
+            <Text style={styles.value}>{info?.[0]["Performance PKatt"]}</Text>
+          </View>
+          <View style={styles.elements}>
+            <Text style={styles.label}>Performance Yellow Cards : </Text>
+            <Text style={styles.value}>{info?.[0]["Performance CrdY"]}</Text>
+          </View>
+          <View style={styles.elements}>
+            <Text style={styles.label}>Performance Red Cards : </Text>
+            <Text style={styles.value}>{info?.[0]["Performance CrdR"]}</Text>
+          </View>
+          <View style={styles.elements}>
+            <Text style={styles.label}>Expected xG : </Text>
+            <Text style={styles.value}>{info?.[0]["Expected xG"]}</Text>
+          </View>
+          <View style={styles.elements}>
+            <Text style={styles.label}>Expected npxG : </Text>
+            <Text style={styles.value}>{info?.[0]["Expected npxG"]}</Text>
+          </View>
+          <View style={styles.elements}>
+            <Text style={styles.label}>Expected xAG : </Text>
+            <Text style={styles.value}>{info?.[0]["Expected xAG"]}</Text>
+          </View>
+          <View style={styles.elements}>
+            <Text style={styles.label}>Expected npxG + xAG : </Text>
+            <Text style={styles.value}>{info?.[0]["Expected npxG+xAG"]}</Text>
+          </View>
+          <View style={styles.elements}>
+            <Text style={styles.label}>Progression PrgC : </Text>
+            <Text style={styles.value}>{info?.[0]["Progression PrgC"]}</Text>
+          </View>
+          <View style={styles.elements}>
+            <Text style={styles.label}>Progression PrgC : </Text>
+            <Text style={styles.value}>{info?.[0]["Progression PrgC"]}</Text>
+          </View>
+          <View style={styles.elements}>
+            <Text style={styles.label}>Progression PrgP : </Text>
+            <Text style={styles.value}>{info?.[0]["Progression PrgP"]}</Text>
+          </View>
+          <View style={styles.elements}>
+            <Text style={styles.label}>Progression PrgR : </Text>
+            <Text style={styles.value}>{info?.[0]["Progression PrgR"]}</Text>
+          </View>
+          <View style={styles.elements}>
+            <Text style={styles.label}>Per 90 Minutes Gls : </Text>
+            <Text style={styles.value}>{info?.[0]["Per 90 Minutes Gls"]}</Text>
+          </View>
+          <View style={styles.elements}>
+            <Text style={styles.label}>Per 90 Minutes Ast : </Text>
+            <Text style={styles.value}>{info?.[0]["Per 90 Minutes Ast"]}</Text>
+          </View>
+          <View style={styles.elements}>
+            <Text style={styles.label}>Per 90 Minutes G+A : </Text>
+            <Text style={styles.value}>{info?.[0]["Per 90 Minutes G+A"]}</Text>
+          </View>
+          <View style={styles.elements}>
+            <Text style={styles.label}>Per 90 Minutes G-PK : </Text>
+            <Text style={styles.value}>{info?.[0]["Per 90 Minutes G-PK"]}</Text>
+          </View>
+          <View style={styles.elements}>
+            <Text style={styles.label}>Per 90 Minutes G+A-PK : </Text>
+            <Text style={styles.value}>
+              {info?.[0]["Per 90 Minutes G+A-PK"]}
+            </Text>
+          </View>
+          <View style={styles.elements}>
+            <Text style={styles.label}>Per 90 Minutes xG : </Text>
+            <Text style={styles.value}>{info?.[0]["Per 90 Minutes xG"]}</Text>
+          </View>
+          <View style={styles.elements}>
+            <Text style={styles.label}>Per 90 Minutes xAG : </Text>
+            <Text style={styles.value}>{info?.[0]["Per 90 Minutes xAG"]}</Text>
+          </View>
+          <View style={styles.elements}>
+            <Text style={styles.label}>Per 90 Minutes xG+xAG : </Text>
+            <Text style={styles.value}>
+              {info?.[0]["Per 90 Minutes xG+xAG"]}
+            </Text>
+          </View>
+          <View style={styles.elements}>
+            <Text style={styles.label}>Per 90 Minutes npxG : </Text>
+            <Text style={styles.value}>{info?.[0]["Per 90 Minutes npxG"]}</Text>
+          </View>
+          <View style={styles.elements}>
+            <Text style={styles.label}>Per 90 Minutes npxG+xAG : </Text>
+            <Text style={styles.value}>
+              {info?.[0]["Per 90 Minutes npxG+xAG"]}
+            </Text>
+          </View>
         </View>
       </ScrollView>
       {!isSaved && (
@@ -278,14 +470,14 @@ const styles = StyleSheet.create({
   label: {
     fontStyle: "normal",
     fontWeight: 400,
-    fontSize: 30,
+    fontSize: 25,
     lineHeight: 30,
     color: "#797979",
   },
   value: {
     fontStyle: "normal",
     fontWeight: 400,
-    fontSize: 30,
+    fontSize: 25,
     lineHeight: 30,
     color: "#FFFFFF",
   },
