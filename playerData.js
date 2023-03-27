@@ -23,7 +23,7 @@ const PlayerData = ({ route, navigation }) => {
   const playerInfo = async () => {
     try {
       const res = await axios.get(
-        `https://60cf-91-68-214-149.eu.ngrok.io/data/${player.player}`
+        `https://1da3-91-68-214-149.eu.ngrok.io/data/${player.player}`
       );
       setPlayerInformation(res.data);
     } catch (error) {
@@ -82,8 +82,7 @@ const PlayerData = ({ route, navigation }) => {
       <View style={styles.header}>
         <TouchableOpacity
           onPress={() => navigation.goBack()}
-          style={styles.backButton}
-        >
+          style={styles.backButton}>
           <Image source={chevronImage} style={styles.backButtonImage} />
         </TouchableOpacity>
         <Text style={styles.title}>Player Statistic</Text>

@@ -15,7 +15,7 @@ import {
   StyleSheet,
 } from "react-native";
 import SignIn from "./SignIn";
-import PlayerData from "./PlayerData";
+import PlayerData from "./playerData";
 import LoginPage from "./LoginPage";
 
 const Stack = createNativeStackNavigator();
@@ -46,8 +46,7 @@ const App = () => {
   return (
     <View style={styles.container}>
       <UserContext.Provider
-        value={{ user, isAuthenticated, setUser, setIsAuthenticated }}
-      >
+        value={{ user, isAuthenticated, setUser, setIsAuthenticated }}>
         <NavigationContainer>
           <Stack.Navigator screenOptions={{ headerShown: false }}>
             {isAuthenticated ? (

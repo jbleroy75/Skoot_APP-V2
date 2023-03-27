@@ -72,8 +72,7 @@ const LoginPage = () => {
           <Text style={styles.stayLoggedInText}>Resté connecté</Text>
           <TouchableOpacity
             style={styles.stayLoggedInToggle}
-            onPress={() => setStayLoggedIn(!stayLoggedIn)}
-          >
+            onPress={() => setStayLoggedIn(!stayLoggedIn)}>
             <View
               style={[
                 styles.stayLoggedInToggleCircle,

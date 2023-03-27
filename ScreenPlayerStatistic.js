@@ -26,7 +26,7 @@ const ScreenPlayerStatistic = ({ navigation }) => {
   const fetchPlayers = async () => {
     try {
       const res = await axios.get(
-        `https://60cf-91-68-214-149.eu.ngrok.io/data`
+        `https://1da3-91-68-214-149.eu.ngrok.io/data`
       );
       setInfo(res.data);
     } catch (error) {
@@ -56,8 +56,7 @@ const ScreenPlayerStatistic = ({ navigation }) => {
       <Text style={styles.title}>Players</Text>
       <TouchableOpacity
         onPress={() => setModalVisible(true)}
-        style={styles.filterButton}
-      >
+        style={styles.filterButton}>
         <Text style={styles.filterButtonText}>Filter</Text>
       </TouchableOpacity>
       <Modal
@@ -66,14 +65,12 @@ const ScreenPlayerStatistic = ({ navigation }) => {
         visible={modalVisible}
         onRequestClose={() => {
           setModalVisible(!modalVisible);
-        }}
-      >
+        }}>
         <View style={styles.modalView}>
           <Text style={styles.modalTitle}></Text>
           <TouchableOpacity
             onPress={() => setModalVisible(false)}
-            style={styles.closeButton}
-          >
+            style={styles.closeButton}>
             <Text style={styles.closeButtonText}>Close</Text>
           </TouchableOpacity>
         </View>
@@ -88,13 +85,11 @@ const ScreenPlayerStatistic = ({ navigation }) => {
       </View>
       <ScrollView
         style={styles.playersList}
-        contentContainerStyle={{ alignItems: "center" }}
-      >
+        contentContainerStyle={{ alignItems: "center" }}>
         {info.map((player) => (
           <TouchableOpacity
             key={player.player} // <-- Utiliser une propriété unique pour chaque objet
-            onPress={() => handlePlayerPress(player, navigation)}
-          >
+            onPress={() => handlePlayerPress(player, navigation)}>
             <View style={styles.playerContainer}>
               <View style={styles.logoContainer}>
                 <Image source={{ uri: player.logoUri }} style={styles.logo} />
