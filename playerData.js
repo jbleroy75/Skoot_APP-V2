@@ -113,8 +113,8 @@ const PlayerData = ({ route, navigation }) => {
       <TouchableOpacity>
         <Ionicons
           name={"bookmark"}
-          top={0}
-          left={160}
+          top={-45}
+          left={175}
           size={24}
           color={isInFavorite ? "#FFD700" : "#ffff"}
           onPress={addToFavorite}
