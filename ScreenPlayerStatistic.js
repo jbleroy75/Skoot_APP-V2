@@ -203,8 +203,8 @@ const ScreenPlayerStatistic = ({ navigation }) => {
                 </View>
                 <View style={styles.playerImageContainer}>
                   <Image
-                    source={{ uri: player.imageUri }}
-                    style={styles.playerImage}
+                    source={{ uri: player.p }}
+                    style={styles.imageProfile}
                   />
                 </View>
               </View>

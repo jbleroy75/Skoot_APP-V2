@@ -123,7 +123,7 @@ const PlayerData = ({ route, navigation }) => {
       <View style={styles.headerInfo}>
         <View style={styles.imageNameScoreContainer}>
           <Image
-            source={require("./assets/joueur.png")}
+            source={{ uri: playerInformation?.[0]?.p }}
             style={styles.imageProfile}
           />
           <Text style={styles.namePlayer}>{playerInformation[0]?.player}</Text>
@@ -134,7 +134,9 @@ const PlayerData = ({ route, navigation }) => {
               }}
               style={styles.scoreBackground}
             />
-            <Text style={styles.scoreGeneral}>90</Text>
+            <Text style={styles.scoreGeneral}>
+              {playerInformation?.[0]?.rating}
+            </Text>
           </View>
         </View>
       </View>
